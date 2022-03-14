@@ -2,9 +2,14 @@ import {MainLayout} from "../../../components/MainLayout";
 import Link from "next/link";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
+import {NextPageContext} from "next";
+import {IQuestion} from "../../../interfaces/questions";
 
+interface QuestionPageProps {
+    question: IQuestion
+}
 
-export default function Question({ question: serverQuestion }) {
+export default function Question({ question: serverQuestion }: QuestionPageProps) {
     const [question, setQuestion] = useState(serverQuestion)
     const router = useRouter()
     useEffect(() => {
@@ -36,11 +41,17 @@ export default function Question({ question: serverQuestion }) {
     )
 }
 
-export async function getServerSideProps({query, req}) {
+interface QuestionNextPageContext extends NextPageContext {
+    query: {
+        id: string
+    }
+}
+
+export async function getServerSideProps({ query, req }: QuestionNextPageContext) {
     if (!req) {
         return {question: null}
     }
     const response = await fetch(`http://localhost:8080/question/api/v1/adminId/6338b801-4ed2-47e0-8a44-88f0d8da2ea2/${query.id}`)
-    const question = await response.json()
+    const question: IQuestion = await response.json()
     return {props: {question}}
 }

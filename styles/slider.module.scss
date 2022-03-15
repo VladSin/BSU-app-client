@@ -1,0 +1,59 @@
+@import "../styles/colors.scss";
+
+.slider {
+  z-index: 0;
+  margin-bottom: 2rem;
+  padding: 0 3%;
+}
+
+.image {
+  border-radius: 1rem;
+  position: relative;
+  padding: 0 1rem;
+}
+.title {
+  position: absolute;
+  display: block;
+  max-width: 35%;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 2rem;
+  font-size: 1.6rem;
+  color: $white;
+}
+
+@media (min-width: 434.98px) {
+  .title {
+    font-size: 1.9rem;
+  }
+}
+@media (min-width: 575.98px) {
+  .title {
+    font-size: 2.3em;
+  }
+  .slider {
+    padding: 0 calc(50% - 270px);
+  }
+}
+
+@media (min-width: 767.98px) {
+  .title {
+    font-size: 2.6em;
+    left: 5rem;
+  }
+  .slider {
+    padding: 0 calc(50% - 360px);
+  }
+}
+
+@media (min-width: 991.98px) {
+  .slider {
+    padding: 0 calc(50% - 480px);
+  }
+}
+
+@media (min-width: 1199.98px) {
+  .slider {
+    padding: 0 calc(50% - 590px);
+  }
+}

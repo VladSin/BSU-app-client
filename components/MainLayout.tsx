@@ -1,18 +1,34 @@
-import Head from "next/head";
+import Header from "../modules/Header";
+import HeadMeta from "../modules/HeadMeta";
 
-export function MainLayout({children, title = 'BSU exam system'}) {
+interface Layout {
+    children: React.ReactNode;
+    title?: string;
+    description?: string;
+    keywords?: string;
+    themeColor?: boolean;
+}
 
+export function MainLayout({ children,
+                             title = 'BSU exam system',
+                             keywords = 'BSU',
+                             description = 'Welcome to page',
+                             themeColor }: Layout) {
     return (
         <>
-            <Head>
-                <title>{title}</title>
-                <meta name={'keywords'} content={'admin'}/>
-                <meta name={'description'} content={'Welcome page for admin'}/>
-                <meta charSet={'utf-8'}/>
-            </Head>
-            <nav>Navigation</nav>
-            <main>{children}</main>
+            <HeadMeta
+                title={title}
+                description={description}
+                keywords={keywords}
+                themeColor={themeColor}>
+            </HeadMeta>
+            <header><Header /></header>
+            <main>
+                <h1>.</h1>
+                <h1>.</h1>
+                {children}
+            </main>
+            <footer></footer>
         </>
-    )
-
+    );
 }

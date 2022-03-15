@@ -1,0 +1,116 @@
+@import "../styles/colors.scss";
+
+.header {
+  background: $primaryblue;
+  overflow: auto;
+  display: flex;
+  justify-content: flex-start;
+  box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.42);
+  margin-bottom: 1rem;
+}
+
+.sticky {
+  position: fixed;
+  min-height: 5rem;
+  width: 100%;
+  z-index: 1;
+  background: $primaryblue;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.42);
+  button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  svg {
+    fill: $white;
+  }
+  .logo {
+    width: 14rem;
+  }
+  .links {
+    display: none;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: 1rem;
+    a {
+      color: $white;
+      font-size: 1.8rem;
+      text-decoration: none;
+    }
+  }
+}
+
+.wrapper {
+  display: flex;
+  padding: 1rem;
+  min-height: 9rem;
+  justify-content: center;
+  align-items: flex-start;
+  align-content: center;
+  margin-top: 5rem;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  svg {
+    position: absolute;
+    top: 10%;
+    fill: $white;
+  }
+
+  li {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    text-align: center;
+    position: relative;
+    margin: 0 0.5rem;
+    width: 12rem;
+    height: 7rem;
+    border-radius: 0.5rem;
+    background: $secondaryblue;
+    box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.42);
+
+    a {
+      position: absolute;
+      white-space: nowrap;
+      bottom: 0.5rem;
+      color: $white;
+      font-size: 1.4rem;
+      padding: 5rem 2.5rem 0;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+  }
+}
+
+@media (min-width: 767.98px) {
+  .sticky {
+    min-height: 7rem;
+    .logo {
+      width: 20rem;
+    }
+    .links {
+      display: flex;
+    }
+  }
+  .wrapper {
+    margin-top: 7rem;
+  }
+}
+
+@media (min-width: 790px) {
+  .header {
+    justify-content: center;
+  }
+}
+
+@media (min-width: 1199.98px) {
+  .sticky {
+    padding: 0 calc(50% - 590px);
+  }
+}

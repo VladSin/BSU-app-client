@@ -1,0 +1,33 @@
+@import "../styles/colors.scss";
+
+.image__container {
+  position: relative;
+  width: 50%;
+  margin: auto;
+  img {
+    border-radius: 1.5rem;
+    cursor: pointer;
+  }
+}
+
+.post__container {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  background: $white;
+  border-radius: 0.5rem;
+  margin: 3rem;
+  padding: 2rem;
+  a,
+  p {
+    font-size: 1.6rem;
+  }
+}
+
+[data-theme="dark"] {
+  .post__container {
+    background: $darkgray;
+  }
+}

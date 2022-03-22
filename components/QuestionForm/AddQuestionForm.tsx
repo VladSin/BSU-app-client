@@ -24,7 +24,7 @@ export default function AddQuestionForm() {
             onSubmit={async (values: AddQuestionProps) => {
                 setMessageSent(true);
                 console.log("SUBMITTED", values);
-                const response = axios.post(`${process.env.API_URL}/question/api/v1/adminId/${process.env.ID}`, values.question)
+                const response = axios.post(`${process.env.API_URL}/question/api/v1/adminId/${process.env.ID}`, values)
                 console.log(response)
                 Router.push("/admin/questions")
             }}

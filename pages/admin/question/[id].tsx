@@ -72,7 +72,7 @@ export default function Question({question: serverQuestion}: QuestionPageProps) 
                         onSubmit={async (values: QuestionProps) => {
                             setMessageSent(true);
                             console.log("SUBMITTED", values);
-                            await axios.post(`${process.env.API_URL}/question/api/v1/adminId/${process.env.ID}/${router.query.id}`, values.question)
+                            await axios.post(`${process.env.API_URL}/question/api/v1/adminId/${process.env.ID}/${router.query.id}`, values)
                             Router.push("/admin/questions")
                         }}
                     >

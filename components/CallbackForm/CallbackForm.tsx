@@ -21,7 +21,7 @@ export default function CallbackForm() {
 
     const goToPageWithId = () => {
         if (userId) {
-            Router.push(`${process.env.API_URL}/exam/api/questions/userId/${userId}`)
+            Router.push(`/exam/${userId}`)
         }
         console.log(userId)
     }
@@ -54,9 +54,11 @@ export default function CallbackForm() {
             onSubmit={async (values: RegisterPageProps) => {
                 setMessageSent(true);
                 console.log("SUBMITTED", values);
-                const {data: response} = await axios.post(`${process.env.API_URL}/exam/api/registration`, values)
-                const data = await response
-                setUserId(data)
+                const response = await axios.post(`${process.env.API_URL}/exam/api/registration`, values)
+                const data = await response.data.id
+                console.log("DATA", data)
+                await setUserId(data)
+
             }}
             validationSchema={validationSchema}
         >
@@ -105,10 +107,13 @@ export default function CallbackForm() {
                                 disabled={isSubmitting}
                                 className={classes.input}
                             >
-                                <option disabled defaultValue="KB">Выберите группу</option>
+                                <option>Выберите группу</option>
                                 <option value="KB">КБ</option>
                                 <option value="PI">ПИ</option>
                             </Field>
+                            {touched.groupName && errors.groupName && (
+                                <span className={classes.error}>{errors.groupName}</span>
+                            )}
                         </div>
 
                         <Button
@@ -119,7 +124,7 @@ export default function CallbackForm() {
                             Отправить и начать
                         </Button>
 
-                        {isSubmitting ? (
+                        {userId ? (
                             <div className={classes.sent} ref={messageRef}>
                                 <Button
                                     type="submit"

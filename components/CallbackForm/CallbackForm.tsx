@@ -50,11 +50,13 @@ export default function CallbackForm() {
                 groupName: "",
             }}
             validateOnBlur
-            Submit={async (values: RegisterPageProps) => {
+
+            onSubmit={async (values: RegisterPageProps) => {
                 setMessageSent(true);
                 console.log("SUBMITTED", values);
-                const response = axios.post(`${process.env.API_URL}/exam/api/registration`, values)
-                console.log(response)
+                const {data: response} = await axios.post(`${process.env.API_URL}/exam/api/registration`, values)
+                const data = await response
+                setUserId(data)
             }}
             validationSchema={validationSchema}
         >

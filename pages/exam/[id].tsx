@@ -1,17 +1,20 @@
 import {IQuestion} from "../../interfaces/question";
 import {NextPageContext} from "next";
-import {IUser} from "../../interfaces/user";
 import {IAnswer} from "../../interfaces/answer";
 import {useEffect, useState} from "react";
 import {MainLayout} from "../../components/MainLayout";
-import {useRouter} from "next/router";
+import Router, {useRouter} from "next/router";
+import {Field, Form, Formik} from "formik";
+import axios from "axios";
+import classes from "../../styles/form.module.scss";
+import Button from "../../components/Button/Button";
 
 interface QuestionsPageProps {
     questions: IQuestion[]
 }
 
-interface UserPageProps {
-    user: IUser
+interface AnswersPageProps {
+    answers: IAnswer[]
 }
 
 interface AnswerPageProps {
@@ -21,6 +24,7 @@ interface AnswerPageProps {
 export default function Exam({questions: serverQuestions}: QuestionsPageProps) {
 
     const [questions, setQuestions] = useState(serverQuestions)
+    const [messageSent, setMessageSent] = useState(false);
     const router = useRouter()
     useEffect(() => {
         async function load() {
@@ -58,7 +62,76 @@ export default function Exam({questions: serverQuestions}: QuestionsPageProps) {
         <MainLayout title={'Exam'}>
             <h1>Good Luck!</h1>
             <hr/>
+            <Formik
+                initialValues={{
+                    answers: [],
+                }}
+                validateOnBlur
+                onSubmit={async (values: AnswersPageProps) => {
+                    setMessageSent(true);
+                    console.log("SUBMITTED", values);
+                    const response = axios.post(`${process.env.API_URL}/api/answers/userId/${router.query.id}`, values.answers)
+                    console.log(response)
+                    Router.push("/")
+                }}
+            >
+                {({
+                      values,
+                      errors,
+                      touched,
+                      handleSubmit,
+                      setFieldValue,
+                      isSubmitting,
+                  }) => (
+                    <>
+                        <section>
+                            <Form className={classes.form}>
 
+                                <hr/>
+                                <p>{questionList.at(0)}</p>
+
+                                <div className={classes.callback}>
+                                    <label className={classes.label} htmlFor={"answer"}>Ответ</label>
+                                    <Field
+                                        type="text"
+                                        name="answer"
+                                        disabled={isSubmitting}
+                                        inputMode="text"
+                                        placeholder="Ваш ответ"
+                                        className={classes.input}
+                                    />
+                                </div>
+
+                                <hr/>
+                                <p>{questionList.at(1)}</p>
+
+                                <div className={classes.callback}>
+                                    <label className={classes.label} htmlFor={"answer"}>Ответ</label>
+                                    <Field
+                                        type="text"
+                                        name="answer"
+                                        disabled={isSubmitting}
+                                        inputMode="text"
+                                        placeholder="Ваш ответ"
+                                        className={classes.input}
+                                    />
+                                </div>
+
+                                <hr/>
+                                <Button
+                                    type="submit"
+                                    onClick={handleSubmit}
+                                    className={classes.button}
+                                    disabled={isSubmitting}>
+                                    Отправить и сохранить
+                                </Button>
+
+                            </Form>
+                        </section>
+
+                    </>
+                )}
+            </Formik>
         </MainLayout>
     )
 }

@@ -38,7 +38,7 @@ export default function AddQuestionForm() {
             onSubmit={async (values: QuestionProps) => {
                 setMessageSent(true);
                 console.log("SUBMITTED", values);
-                const response = axios.post(`${process.env.API_URL}/question/api/v1/adminId/${process.env.ID}/${values}`)
+                const response = axios.put(`${process.env.API_URL}/question/api/v1/adminId/${process.env.ID}`, values.question)
                 console.log(response)
             }}
         >

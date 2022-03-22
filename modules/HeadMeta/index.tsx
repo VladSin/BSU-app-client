@@ -1,6 +1,7 @@
 import Head from "next/head";
 
 interface HeadProps {
+    children: React.ReactNode;
     title?: string;
     description?: string;
     keywords?: string;

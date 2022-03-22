@@ -19,8 +19,7 @@ export function MainLayout({ children,
             <HeadMeta
                 title={title}
                 description={description}
-                keywords={keywords}
-                themeColor={themeColor}>
+                keywords={keywords}>
             </HeadMeta>
             <Header />
             <main>

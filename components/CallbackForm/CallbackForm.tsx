@@ -4,9 +4,8 @@ import * as Yup from "yup";
 import classes from "../../styles/form.module.scss";
 import lottie from "lottie-web";
 import {useEffect, useRef, useState} from "react";
-import {useRouter} from "next/router";
-import Link from "next/link";
-import {IUser} from "../../interfaces/user";
+import Router, {useRouter} from "next/router";
+import axios from "axios";
 
 interface RegisterPageProps {
     firstName: string;
@@ -14,24 +13,19 @@ interface RegisterPageProps {
     groupName: string;
 }
 
-interface UserPageProps {
-    user: IUser
-}
-
-export default function CallbackForm({user: serverUser}: UserPageProps) {
-
-    const [user, setUser] = useState(serverUser);
-    const router = useRouter()
-    useEffect(() => {
-        async function load() {
-            const response = await fetch(`${process.env.API_URL}/exam/api/registration`)
-            const data = await response.json()
-            setUser(data)
-        }
-    }, null)
+export default function CallbackForm() {
 
     const messageRef = useRef(null);
     const [messageSent, setMessageSent] = useState(false);
+    const [userId, setUserId] = useState();
+
+    const goToPageWithId = () => {
+        if (userId) {
+            Router.push(`${process.env.API_URL}/exam/api/questions/userId/${userId}`)
+        }
+        console.log(userId)
+    }
+
     useEffect(() => {
         lottie.loadAnimation({
             container: messageRef.current,
@@ -44,7 +38,7 @@ export default function CallbackForm({user: serverUser}: UserPageProps) {
 
     const validationSchema = Yup.object().shape({
         firstName: Yup.string().required("Поле обязательное"),
-        lastName: Yup.string().required("Поле обязательное"),
+        lastName:  Yup.string().required("Поле обязательное"),
         groupName: Yup.string().required("Поле обязательное"),
     });
 
@@ -56,9 +50,11 @@ export default function CallbackForm({user: serverUser}: UserPageProps) {
                 groupName: "",
             }}
             validateOnBlur
-            onSubmit={(values: RegisterPageProps) => {
+            Submit={async (values: RegisterPageProps) => {
                 setMessageSent(true);
-                console.log(values);
+                console.log("SUBMITTED", values);
+                const response = axios.post(`${process.env.API_URL}/exam/api/registration`, values)
+                console.log(response)
             }}
             validationSchema={validationSchema}
         >
@@ -72,10 +68,9 @@ export default function CallbackForm({user: serverUser}: UserPageProps) {
               }) => (
                 <>
                     <Form className={classes.form}>
+
                         <div>
-                            <label className={classes.label} htmlFor={"firstName"}>
-                                Имя
-                            </label>
+                            <label className={classes.label} htmlFor={"firstName"}>Имя</label>
                             <Field
                                 type="text"
                                 name="firstName"
@@ -88,9 +83,7 @@ export default function CallbackForm({user: serverUser}: UserPageProps) {
                                 <span className={classes.error}>{errors.firstName}</span>
                             )}
 
-                            <label className={classes.label} htmlFor={"lastName"}>
-                                Фамилия
-                            </label>
+                            <label className={classes.label} htmlFor={"lastName"}>Фамилия</label>
                             <Field
                                 type="text"
                                 name="lastName"
@@ -103,39 +96,34 @@ export default function CallbackForm({user: serverUser}: UserPageProps) {
                                 <span className={classes.error}>{errors.lastName}</span>
                             )}
 
-                            <label className={classes.label} htmlFor={"groupName"}>
-                                Группа
-                            </label>
+                            <label className={classes.label} htmlFor={"groupName"}>Группа</label>
                             <Field
-                                type="text"
+                                as="select"
                                 name="groupName"
                                 disabled={isSubmitting}
-                                inputMode="text"
-                                placeholder="Группа (KB/PI)"
                                 className={classes.input}
-                            />
-                            {touched.groupName && errors.groupName && (
-                                <span className={classes.error}>{errors.groupName}</span>
-                            )}
-
+                            >
+                                <option disabled defaultValue="KB">Выберите группу</option>
+                                <option value="KB">КБ</option>
+                                <option value="PI">ПИ</option>
+                            </Field>
                         </div>
+
                         <Button
                             type="submit"
                             onClick={handleSubmit}
                             className={classes.button}
-                            disabled={isSubmitting}
-                        >
+                            disabled={isSubmitting}>
                             Отправить и начать
                         </Button>
+
                         {isSubmitting ? (
                             <div className={classes.sent} ref={messageRef}>
                                 <Button
                                     type="submit"
-                                    onClick={handleSubmit}
+                                    onClick={goToPageWithId}
                                     className={classes.button}>
-                                    <Link href={`/exam/[id]`} as={`/exam/${user.id}`}>
-                                        <a>{user.firstName}, регистрация прошла успешно! Готовы?</a>
-                                    </Link>
+                                    Регистрация прошла успешно! Готовы?
                                 </Button>
                             </div>
                         ) : null}
@@ -145,13 +133,3 @@ export default function CallbackForm({user: serverUser}: UserPageProps) {
         </Formik>
     );
 }
-
-export async function getServerSideProps({req}) {
-    if (!req) {
-        return {user: null}
-    }
-    const response = await fetch(`${process.env.API_URL}/exam/api/registration`)
-    const user: IUser = await response.json()
-    return {props: {user}}
-}
-

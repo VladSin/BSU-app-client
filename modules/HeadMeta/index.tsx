@@ -6,7 +6,7 @@ interface HeadProps {
     keywords?: string;
 }
 
-function HeadMeta({title, description, keywords}: HeadProps): JSX.Element {
+function HeadMeta({title, description, keywords}: HeadProps) {
     return (
         <Head>
             <title>{title} BSU</title>

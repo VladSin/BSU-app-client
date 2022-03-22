@@ -3,8 +3,8 @@ import {NextPageContext} from "next";
 import {useEffect, useState} from "react";
 import Router, {useRouter} from "next/router";
 import {MainLayout} from "../../../components/MainLayout";
-import classes from "../../../styles/form.module.scss";
-import form from "../../styles/form.module.scss";
+import classes from "../../../styles/pages/table.module.scss";
+import button from "../../../styles/form.module.scss";
 import Button from "../../../components/Button/Button";
 
 interface UserPageProps {
@@ -18,7 +18,7 @@ export default function User({user: serverUser}: UserPageProps) {
     useEffect(() => {
         async function load() {
             const response = await fetch(
-                `${process.env.API_URL}/user/api/v1/adminId/6338b801-4ed2-47e0-8a44-88f0d8da2ea2/userId/${router.query.id}`)
+                `${process.env.API_URL}/user/api/v1/adminId/${process.env.ID}/userId/${router.query.id}`)
             const data = await response.json()
             setUser(data)
         }
@@ -44,13 +44,13 @@ export default function User({user: serverUser}: UserPageProps) {
         i += 1
         return (
             <tr key={answer.id}>
-                <td style={{whiteSpace: 'nowrap'}}>
+                <td>
                     <a>№ {i}</a>
                 </td>
-                <td style={{whiteSpace: 'nowrap'}}>
+                <td>
                     <a>{answer.question}</a>
                 </td>
-                <td style={{whiteSpace: 'nowrap'}}>
+                <td>
                     <a>{answer.answer}</a>
                 </td>
             </tr>
@@ -59,32 +59,34 @@ export default function User({user: serverUser}: UserPageProps) {
 
     return (
         <MainLayout title={'Managing User'}>
-            <h1>{user.firstName} {user.lastName} ({user.groupName})</h1>
-            <hr/>
+            <section>
+                <h1>{user.firstName} {user.lastName} ({user.groupName})</h1>
+                <hr/>
+                <br/>
+                <div className={classes.div}>
+                    <table className={classes.table}>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>QUESTION</th>
+                            <th>ANSWER</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {answerList}
+                        </tbody>
+                    </table>
+                </div>
 
-            <div className={classes.div}>
-                <table className={classes.table}>
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>QUESTION</th>
-                        <th>ANSWER</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {answerList}
-                    </tbody>
-                </table>
-            </div>
-
-            <hr/>
-            <div>
-                <p>
-                    <Button type="button" onClick={linkHandlerToUsers} className={classes.button}>
-                        Back to list users
-                    </Button>
-                </p>
-            </div>
+                <hr/>
+                <div>
+                    <p>
+                        <Button type="button" onClick={linkHandlerToUsers} className={button.button}>
+                            Back to list users
+                        </Button>
+                    </p>
+                </div>
+            </section>
         </MainLayout>
     )
 }
@@ -99,7 +101,7 @@ export async function getServerSideProps({query, req}: UserNextPageContext) {
     if (!req) {
         return {user: null}
     }
-    const response = await fetch(`${process.env.API_URL}/user/api/v1/adminId/6338b801-4ed2-47e0-8a44-88f0d8da2ea2/userId/${query.id}`)
+    const response = await fetch(`${process.env.API_URL}/user/api/v1/adminId/${process.env.ID}/userId/${query.id}`)
     const user: IUser = await response.json()
     return {props: {user}}
 }

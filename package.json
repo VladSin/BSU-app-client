@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/react-transition-group": "^4.4.4",
+    "axios": "^0.26.1",
     "dotenv": "^16.0.0",
     "formik": "^2.2.9",
     "lottie-web": "^5.9.1",

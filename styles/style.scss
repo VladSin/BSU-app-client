@@ -73,6 +73,10 @@ p {
   margin-bottom: 2rem;
   padding: 0 0.5rem;
 }
+span, ul, li {
+  font-size: 1.3rem;
+  padding: 0 0.5rem;
+}
 
 @media (min-width: 575.98px) {
   section {
@@ -84,7 +88,7 @@ p {
   section {
     padding: 0 calc(50% - 360px);
   }
-  p {
+  p,span, ul, li {
     font-size: 1.5rem;
     text-align: left;
   }
@@ -103,6 +107,7 @@ p {
     text-align: center;
     margin-bottom: 1.5rem;
   }
+
 }
 
 @media (min-width: 1199.98px) {

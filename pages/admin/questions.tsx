@@ -1,11 +1,10 @@
-import Router from "next/router";
 import Link from "next/link";
 import {MainLayout} from "../../components/MainLayout";
 import {useEffect, useState} from "react";
 import {IQuestion} from "../../interfaces/question";
 import {NextPageContext} from "next";
-import Button from "../../components/Button/Button";
-import classes from "../../styles/form.module.scss";
+import styles from "../../styles/pages/table.module.scss";
+import AddQuestionForm from "../../components/QuestionForm/AddQuestionForm";
 
 
 interface QuestionsPageProps {
@@ -17,7 +16,7 @@ export default function Questions({questions: serverQuestions}: QuestionsPagePro
     const [questions, setQuestions] = useState(serverQuestions)
     useEffect(() => {
         async function load() {
-            const response = await fetch(`${process.env.API_URL}/question/api/v1/adminId/6338b801-4ed2-47e0-8a44-88f0d8da2ea2/all`)
+            const response = await fetch(`${process.env.API_URL}/question/api/v1/adminId/${process.env.ID}/all`)
             const data = await response.json()
             setQuestions(data)
         }
@@ -35,19 +34,18 @@ export default function Questions({questions: serverQuestions}: QuestionsPagePro
         )
     }
 
-    const linkHandlerToIndex = () => {
-        Router.push("/admin")
-    }
-
+    let i = 0
     const questionList = questions.map(question => {
+        i += 1
         return (
             <tr key={question.id}>
-                <td style={{whiteSpace: 'nowrap'}}>
-                    <li key={question.id}>
-                        <Link href={`/admin/question/[id]`} as={`/admin/question/${question.id}`}>
-                            <a>{question.question}</a>
-                        </Link>
-                    </li>
+                <td>
+                    <a>{i}</a>
+                </td>
+                <td>
+                    <Link href={`/admin/question/[id]`} as={`/admin/question/${question.id}`}>
+                        <a>{question.question}</a>
+                    </Link>
                 </td>
             </tr>
         )
@@ -55,30 +53,30 @@ export default function Questions({questions: serverQuestions}: QuestionsPagePro
 
     return (
         <MainLayout title={'Managing Questions'}>
-            <h1>List all Questions</h1>
-            <hr/>
-            <div>
-                <ul>
-                    <table>
+            <section>
+                <h1>Полный список вопросов</h1>
+                <hr/>
+                <span>Чсло вопросов в списке: {questionList.length}</span>
+                <div className={styles.div}>
+                    <table className={styles.table}>
                         <thead>
                         <tr>
-                            <th>Чсло вопросов в списке: {questionList.length}</th>
+                            <th>№</th>
+                            <th>QUESTION</th>
                         </tr>
                         </thead>
                         <tbody>
                         {questionList}
                         </tbody>
                     </table>
-                </ul>
-            </div>
-            <hr/>
-            <div>
-                <p>
-                    <Button type="button" onClick={linkHandlerToIndex} className={classes.button}>Return</Button>
-                    <Button type="button" onClick={linkHandlerToIndex} className={classes.button}>Add New
-                        Question</Button>
-                </p>
-            </div>
+                </div>
+                <hr/>
+                <div>
+                    <p>
+                        <AddQuestionForm/>
+                    </p>
+                </div>
+            </section>
         </MainLayout>
     )
 }
@@ -87,7 +85,7 @@ export async function getServerSideProps({req}: NextPageContext) {
     if (!req) {
         return {questions: null}
     }
-    const response = await fetch(`${process.env.API_URL}/question/api/v1/adminId/6338b801-4ed2-47e0-8a44-88f0d8da2ea2/all`)
+    const response = await fetch(`${process.env.API_URL}/question/api/v1/adminId/${process.env.ID}/all`)
     let questions: IQuestion[] = []
     questions = await response.json()
     return {props: {questions}}

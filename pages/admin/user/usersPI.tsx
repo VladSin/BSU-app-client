@@ -5,7 +5,8 @@ import {MainLayout} from "../../../components/MainLayout";
 import Link from "next/link";
 import Router from "next/router";
 import Button from "../../../components/Button/Button";
-import classes from "../../../styles/form.module.scss";
+import button from "../../../styles/form.module.scss";
+import tableClasses from "../../../styles/pages/table.module.scss";
 
 interface UsersPageProps {
     users: IUser[]
@@ -16,11 +17,14 @@ export default function UsersPI({users: serverUsers}: UsersPageProps) {
     const [users, setUsers] = useState(serverUsers)
     useEffect(() => {
         async function load() {
-            const response = await fetch(`${process.env.API_URL}/user/api/v1/adminId/6338b801-4ed2-47e0-8a44-88f0d8da2ea2/all/pi`)
+            const response = await fetch(`${process.env.API_URL}/user/api/v1/adminId/${process.env.ID}/all/pi`)
             const data = await response.json()
             setUsers(data)
         }
-        if (!users) {load()}
+
+        if (!users) {
+            load()
+        }
     }, null)
 
     if (!users) {
@@ -56,12 +60,8 @@ export default function UsersPI({users: serverUsers}: UsersPageProps) {
             <hr/>
             <div>
                 <ul>
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>Число студентов специальности ПИ: {userList.length}</th>
-                        </tr>
-                        </thead>
+                    <span>Число студентов специальности ПИ: {userList.length}</span>
+                    <table className={tableClasses.table}>
                         <tbody>
                         {userList}
                         </tbody>
@@ -71,7 +71,7 @@ export default function UsersPI({users: serverUsers}: UsersPageProps) {
             <hr/>
             <div>
                 <p>
-                    <Button type="button" onClick={linkHandlerToIndex} className={classes.button}>Return</Button>
+                    <Button type="button" onClick={linkHandlerToIndex} className={button.button}>Return</Button>
                 </p>
             </div>
         </MainLayout>
@@ -83,7 +83,7 @@ export async function getServerSideProps({req}: NextPageContext) {
     if (!req) {
         return {users: null}
     }
-    const response = await fetch(`${process.env.API_URL}/user/api/v1/adminId/6338b801-4ed2-47e0-8a44-88f0d8da2ea2/all/pi`)
+    const response = await fetch(`${process.env.API_URL}/user/api/v1/adminId/${process.env.ID}/all/pi`)
     let users: IUser[] = []
     users = await response.json()
     return {props: {users}}

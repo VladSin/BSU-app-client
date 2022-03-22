@@ -22,10 +22,8 @@ export function MainLayout({ children,
                 keywords={keywords}
                 themeColor={themeColor}>
             </HeadMeta>
-            <header><Header /></header>
+            <Header />
             <main>
-                <h1>.</h1>
-                <h1>.</h1>
                 {children}
             </main>
             <footer></footer>

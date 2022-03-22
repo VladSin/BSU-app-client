@@ -1,0 +1,52 @@
+.list {
+background: #008fe2;
+}
+
+.tbody {
+  display: flex;
+}
+
+.table {
+  width: 100%;
+  font-size: 1.4rem;
+  thead {
+    background: #b3b3b3;
+    th {
+      padding: 0.5rem ;
+      &:nth-child(1) {
+        text-align: left;
+        width: 10%;
+      }
+      &:nth-child(2) {
+        text-align: left;
+        width: 45%;
+
+      }
+      &:nth-child(3) {
+        text-align: left;
+        width: 45%;
+
+      }
+    }
+  }
+  tbody {
+    tr {
+      &:nth-child(even) {
+        background: #e0e0e0;
+      }
+      td {
+        padding: 0.5rem;
+        &:nth-child(1) {
+          width: 10%;
+          text-align: left;
+        }
+        &:nth-child(2) {
+          width: 45%;
+        }
+        &:nth-child(3) {
+          width: 45%;
+        }
+      }
+    }
+  }
+}

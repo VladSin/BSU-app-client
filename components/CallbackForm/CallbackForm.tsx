@@ -56,7 +56,6 @@ export default function CallbackForm() {
                 console.log("SUBMITTED", values);
                 const response = await axios.post(`${process.env.API_URL}/exam/api/registration`, values)
                 const data = await response.data.id
-                console.log("DATA", data)
                 await setUserId(data)
 
             }}
@@ -127,7 +126,7 @@ export default function CallbackForm() {
                         {userId ? (
                             <div className={classes.sent} ref={messageRef}>
                                 <Button
-                                    type="submit"
+                                    type='button'
                                     onClick={goToPageWithId}
                                     className={classes.button}>
                                     Регистрация прошла успешно! Готовы?
